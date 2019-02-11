@@ -1,4 +1,4 @@
-import {RouterBuilder} from './routing/router';
+import {RouterBuilder} from '../routing/router';
 import {ServiceRegistry} from './service.registry';
 import {Registry} from './registry';
 import {Application} from 'express';

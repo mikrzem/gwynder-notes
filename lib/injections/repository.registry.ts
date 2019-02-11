@@ -1,6 +1,6 @@
-import {Database} from './datastore/database';
-import {EntityRepository} from './datastore/repository';
-import {NoteRepository} from './notes/repository';
+import {Database} from '../datastore/database';
+import {EntityRepository} from '../datastore/repository';
+import {NoteRepository} from '../notes/repository';
 import {Registry} from './registry';
 
 export class RepositoryRegistry extends Registry {

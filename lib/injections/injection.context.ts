@@ -1,7 +1,7 @@
 import {Database} from '../datastore/database';
-import {RepositoryRegistry} from '../repository.registry';
-import {RouterRegistry} from '../router.registry';
-import {ServiceRegistry} from '../service.registry';
+import {RepositoryRegistry} from './repository.registry';
+import {RouterRegistry} from './router.registry';
+import {ServiceRegistry} from './service.registry';
 import {Application} from 'express';
 
 export class InjectionContext {
