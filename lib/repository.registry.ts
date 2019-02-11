@@ -1,8 +1,9 @@
 import {Database} from './datastore/database';
 import {EntityRepository} from './datastore/repository';
 import {NoteRepository} from './notes/repository';
+import {Registry} from './registry';
 
-export class RepositoryRegistry {
+export class RepositoryRegistry extends Registry {
 
     private readonly repositories: EntityRepository<any>[] = [];
 
@@ -11,6 +12,7 @@ export class RepositoryRegistry {
     constructor(
         private readonly database: Database
     ) {
+        super();
         this.noteRepository = this.database.createRepository(NoteRepository);
         this.repositories.push(this.noteRepository);
     }
