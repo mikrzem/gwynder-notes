@@ -3,9 +3,7 @@ import {EntityRepository} from '../datastore/repository';
 import {NoteRepository} from '../notes/repository';
 import {Registry} from './registry';
 
-export class RepositoryRegistry extends Registry {
-
-    private readonly repositories: EntityRepository<any>[] = [];
+export class RepositoryRegistry extends Registry<EntityRepository<any>> {
 
     public readonly noteRepository: NoteRepository;
 
@@ -13,13 +11,14 @@ export class RepositoryRegistry extends Registry {
         private readonly database: Database
     ) {
         super();
-        this.noteRepository = this.database.createRepository(NoteRepository);
-        this.repositories.push(this.noteRepository);
+        this.noteRepository = this.add(
+            this.database.createRepository(NoteRepository)
+        );
     }
 
     public async initialize() {
         await Promise.all(
-            this.repositories.map(repository => repository.initialize())
+            this.all.map(repository => repository.initialize())
         );
     }
 

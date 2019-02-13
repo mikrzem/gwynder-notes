@@ -3,17 +3,15 @@ import {ServiceRegistry} from './service.registry';
 import {Registry} from './registry';
 import {Application} from 'express';
 
-export class RouterRegistry extends Registry {
-
-    private readonly routerBuilders: RouterBuilder[] = [];
+export class RouterRegistry extends Registry<RouterBuilder> {
 
     constructor(
-       private readonly services: ServiceRegistry
+        private readonly services: ServiceRegistry
     ) {
         super();
     }
 
     public createRoutes(app: Application) {
-        this.routerBuilders.forEach(builder => app.use(builder.router));
+        this.all.forEach(builder => app.use(builder.rootPath, builder.router));
     }
 }

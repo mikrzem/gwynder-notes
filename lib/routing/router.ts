@@ -14,4 +14,8 @@ export abstract class RouterBuilder {
         return this._router;
     }
 
+    get rootPath() {
+        return '/';
+    }
+
 }
