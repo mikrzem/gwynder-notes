@@ -1,4 +1,5 @@
 import {Pool} from 'pg';
+import {BaseData} from './data';
 import {Entity} from './entity';
 import {EntityRepository} from './repository';
 
@@ -20,7 +21,7 @@ export class Database {
         await this.pool.connect();
     }
 
-    public createRepository<Data extends Entity, Repository extends EntityRepository<Data>>(
+    public createRepository<SelectedEntity extends Entity, SelectedData extends BaseData, Repository extends EntityRepository<SelectedEntity, BaseData>>(
         RepositoryType: new (pool: Pool) => Repository
     ): Repository {
         return new RepositoryType(this.pool);

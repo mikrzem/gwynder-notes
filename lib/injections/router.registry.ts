@@ -1,14 +1,19 @@
-import {RouterBuilder} from '../routing/router';
-import {ServiceRegistry} from './service.registry';
-import {Registry} from './registry';
 import {Application} from 'express';
+import {RouterBuilder} from '../base/router';
+import {NoteRouter} from '../notes/router';
+import {Registry} from './registry';
+import {ServiceRegistry} from './service.registry';
 
 export class RouterRegistry extends Registry<RouterBuilder> {
+
+    public readonly notes: NoteRouter;
 
     constructor(
         private readonly services: ServiceRegistry
     ) {
         super();
+
+        this.notes = this.add(new NoteRouter(services.notes));
     }
 
     public createRoutes(app: Application) {

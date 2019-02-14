@@ -3,7 +3,7 @@ import {EntityRepository} from '../datastore/repository';
 import {NoteRepository} from '../notes/repository';
 import {Registry} from './registry';
 
-export class RepositoryRegistry extends Registry<EntityRepository<any>> {
+export class RepositoryRegistry extends Registry<EntityRepository<any, any>> {
 
     public readonly noteRepository: NoteRepository;
 

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {Schema} from '../data';
 import {ColumnData} from './data';
 
@@ -14,17 +15,17 @@ class ColumnService {
         }
     }
 
-    private createSchema(entity: any): Schema {
-        const result = new Schema();
-        Reflect.defineMetadata(SCHEMA_KEY, result, entity);
-        return result;
-    }
-
     public addColumn(target: any, property: string): ColumnData {
         const columnData = new ColumnData(property);
         const schema = this.getSchema(target);
         schema.setColumn(property, columnData);
         return columnData;
+    }
+
+    private createSchema(entity: any): Schema {
+        const result = new Schema();
+        Reflect.defineMetadata(SCHEMA_KEY, result, entity);
+        return result;
     }
 
 }
