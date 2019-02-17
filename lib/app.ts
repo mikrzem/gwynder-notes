@@ -1,4 +1,5 @@
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
 import * as express from 'express';
 import {baseLogger} from './base/logging';
 import {InjectionContext} from './injections/injection.context';
@@ -32,6 +33,7 @@ class Application {
     private config() {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended: false}));
+        this.app.use(cors());
     }
 }
 
