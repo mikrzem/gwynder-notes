@@ -10,7 +10,7 @@ export class NoteRouter extends RouterBuilder {
     }
 
     get rootPath() {
-        return '/api/notes';
+        return '/api/notes/notes';
     }
 
     protected initializeRoutes() {

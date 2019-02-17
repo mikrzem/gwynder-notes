@@ -6,6 +6,6 @@ export interface CreateResult {
 
 export interface BaseData {
 
-    id: number;
+    id?: number;
 
 }
