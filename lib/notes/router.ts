@@ -1,10 +1,12 @@
 import {ResponseCreatorParams, RouterBuilder} from '../base/router';
+import {PagingService} from '../utils/paging.service';
 import {NoteService} from './service';
 
 export class NoteRouter extends RouterBuilder {
 
     constructor(
-        private readonly service: NoteService
+        private readonly service: NoteService,
+        private readonly paging: PagingService
     ) {
         super();
     }
@@ -16,7 +18,10 @@ export class NoteRouter extends RouterBuilder {
     protected initializeRoutes() {
         this.get(
             '/',
-            params => this.service.selectAll(params.owner)
+            params => this.service.selectPage(
+                params.owner,
+                this.paging.readRequest(params.request)
+            )
         );
         this.get(
             '/:id',

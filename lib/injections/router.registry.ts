@@ -13,7 +13,7 @@ export class RouterRegistry extends Registry<RouterBuilder> {
     ) {
         super();
 
-        this.notes = this.add(new NoteRouter(services.notes));
+        this.notes = this.add(new NoteRouter(services.notes, services.paging));
     }
 
     public createRoutes(app: Application) {

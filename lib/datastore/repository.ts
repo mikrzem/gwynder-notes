@@ -1,7 +1,8 @@
-import {Pool} from 'pg';
+import {Pool, QueryResult} from 'pg';
 import {DataNotFound} from '../utils/response.errors';
 import {BaseData, CreateResult} from './data';
 import {Entity} from './entity';
+import {PageRequest, PageResponse} from './paging';
 import {columnService} from './schema/columns/service';
 import {Schema} from './schema/data';
 
@@ -71,7 +72,25 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
             `SELECT * FROM ${this.entityName}  WHERE owner = $1`,
             [owner]
         );
-        return results.rows.map(row => this.createEntity(row));
+        return this.parseResults(results);
+    }
+
+    public async findPage(owner: string, request: PageRequest): Promise<PageResponse<SelectedEntity>> {
+        const result = await this.pool.query(
+            `SELECT * FROM ${this.entityName} 
+                    WHERE owner = $1
+                    ORDER BY id ${request.oldestFirst ? 'ASC' : 'DESC'}
+                    LIMIT ${request.pageSize} OFFSET ${request.page * request.pageSize}`,
+            [owner]
+        );
+        const count = await this.count(owner);
+        return {
+            data: this.parseResults(result),
+            count: count,
+            page: request.page,
+            pageSize: request.pageSize,
+            totalPages: Math.ceil(count / request.pageSize)
+        };
     }
 
     public async create(content: SelectedData, owner: string): Promise<CreateResult> {
@@ -108,6 +127,10 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
     }
 
     protected async postInitialize() { }
+
+    protected parseResults(results: QueryResult): SelectedEntity[] {
+        return results.rows.map(row => this.createEntity(row));
+    }
 
     /**
      * Copying field according to schema

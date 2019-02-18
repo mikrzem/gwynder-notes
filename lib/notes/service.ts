@@ -1,12 +1,15 @@
 import {BaseService} from '../base/service';
 import {CreateResult} from '../datastore/data';
+import {PageRequest, PageResponse} from '../datastore/paging';
+import {PagingService} from '../utils/paging.service';
 import {NoteData} from './data';
 import {NoteRepository} from './repository';
 
 export class NoteService extends BaseService {
 
     constructor(
-        private readonly repository: NoteRepository
+        private readonly repository: NoteRepository,
+        private readonly paging: PagingService
     ) {
         super();
     }
@@ -19,6 +22,11 @@ export class NoteService extends BaseService {
     public async selectAll(owner: string): Promise<NoteData[]> {
         let notes = await this.repository.findAll(owner);
         return notes.map(note => this.repository.createContent(note));
+    }
+
+    public async selectPage(owner: string, page: PageRequest): Promise<PageResponse<NoteData>> {
+        let response = await this.repository.findPage(owner, page);
+        return this.paging.mapResponse(response, source => this.repository.createContent(source));
     }
 
     public async create(content: NoteData, owner: string): Promise<CreateResult> {
