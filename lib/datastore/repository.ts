@@ -50,10 +50,10 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
 
     public async count(owner: string): Promise<number> {
         let result = await this.pool.query(
-            `SELECT COUNT(1) AS AMOUNT FROM ${this.entityName}  WHERE owner = $2`,
+            `SELECT COUNT(1) AS AMOUNT FROM ${this.entityName}  WHERE owner = $1`,
             [owner]
         );
-        return result.rows[0]['AMOUNT'];
+        return parseInt(result.rows[0]['AMOUNT'] || result.rows[0]['amount'], 10);
     }
 
     public async find(id: number, owner: string): Promise<SelectedEntity> {
@@ -76,11 +76,12 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
     }
 
     public async findPage(owner: string, request: PageRequest): Promise<PageResponse<SelectedEntity>> {
+        let query = `SELECT * FROM ${this.entityName} 
+                WHERE owner = $1
+                ORDER BY id ${request.oldestFirst ? 'ASC' : 'DESC'}
+                LIMIT ${request.pageSize} OFFSET ${request.page * request.pageSize}`;
         const result = await this.pool.query(
-            `SELECT * FROM ${this.entityName} 
-                    WHERE owner = $1
-                    ORDER BY id ${request.oldestFirst ? 'ASC' : 'DESC'}
-                    LIMIT ${request.pageSize} OFFSET ${request.page * request.pageSize}`,
+            query,
             [owner]
         );
         const count = await this.count(owner);
