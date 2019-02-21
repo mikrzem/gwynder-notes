@@ -112,7 +112,7 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
             `UPDATE ${this.entityName} SET content = $1 WHERE id = $2 AND owner = $3 RETURNING id`,
             [content, id, owner]
         );
-        if (result.rows.length < 1) {
+        if (result.rowCount< 1) {
             throw new DataNotFound(this.entityName + ':' + id);
         }
     }
@@ -122,7 +122,7 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
             `DELETE FROM ${this.entityName} WHERE id = $1 AND owner = $2`,
             [id, owner]
         );
-        if (result.rows.length < 1) {
+        if (result.rowCount < 1) {
             throw new DataNotFound(this.entityName + ':' + id);
         }
     }
