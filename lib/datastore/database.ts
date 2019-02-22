@@ -9,10 +9,10 @@ export class Database {
 
     constructor() {
         this.pool = new Pool({
-            user: process.env['notes.database.user'] || 'node',
-            password: process.env['notes.database.user'] || 'node',
-            host: process.env['notes.database.host'] || 'localhost',
-            port: parseInt(process.env['notes.database.port'] || '5432'),
+            user: process.env['notes_database_user'] || 'node',
+            password: process.env['notes_database_password'] || 'node',
+            host: process.env['notes_database_host'] || 'localhost',
+            port: parseInt(process.env['notes_database_port'] || '5432'),
             database: 'gwynder_notes'
         });
     }
