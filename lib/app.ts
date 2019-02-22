@@ -21,6 +21,7 @@ class Application {
         this.app = express();
         this.staticFiles = new StaticFiles(this.app);
         this.config();
+        this.logEnv();
     }
 
     public async start() {
@@ -41,6 +42,14 @@ class Application {
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(cors());
         this.staticFiles.initialize();
+    }
+
+    private logEnv() {
+        const localEnv = {};
+        Object.keys(process.env)
+            .filter(key => key.startsWith('notes.'))
+            .forEach(key => localEnv[key] = process.env[key]);
+        this.logger.info('Current env', {env: localEnv});
     }
 }
 
