@@ -19,9 +19,9 @@ class Application {
 
     constructor() {
         this.app = express();
+        this.logEnv();
         this.staticFiles = new StaticFiles(this.app);
         this.config();
-        this.logEnv();
     }
 
     public async start() {
