@@ -1,14 +1,13 @@
 {
   "name": "gwynder-notes",
   "version": "1.0.0",
-  "description": "",
+  "description": "Application for storing notes",
   "main": "./dist/server.js",
   "scripts": {
     "start:prod": "nodemon ./dist/server.js",
-    "start:dev": "ts-node ./lib/server.ts",
-    "build:prod": "tsc",
-    "build:dev": "tsc -w",
-    "prod": "npm run build:prod && npm run start:prod"
+    "build:tsc": "tsc",
+    "build:version": "node ./extract.version.js",
+    "build:all": "npm run build:tsc && npm run build:version"
   },
   "repository": {
     "type": "git",
