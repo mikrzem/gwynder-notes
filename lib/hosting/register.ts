@@ -6,11 +6,11 @@ import {BaseService} from '../base/service';
 export class RegistrationService extends BaseService {
 
     private get registerUrl(): string {
-        return process.env['notes.register.url'];
+        return process.env['notes_register_url'];
     }
 
     private get selfUrl(): string {
-        return process.env['notes.self.url'];
+        return process.env['notes_self_url'];
     }
 
     private get applicationConfiguration() {
@@ -40,11 +40,11 @@ export class RegistrationService extends BaseService {
     }
 
     private shouldRegister() {
-        return process.env['notes.register'] === 'true';
+        return process.env['notes_register'] === 'true';
     }
 
     private async token(): Promise<string> {
-        const token = await (util.promisify(fs.readFile))(process.env['notes.token.file'], 'utf8');
+        const token = await (util.promisify(fs.readFile))(process.env['notes_token_file'], 'utf8');
         if (!token) {
             throw new Error('Missing token during registration');
         }

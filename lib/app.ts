@@ -47,7 +47,7 @@ class Application {
     private logEnv() {
         const localEnv = {};
         Object.keys(process.env)
-            .filter(key => key.startsWith('notes.'))
+            .filter(key => key.startsWith('notes_'))
             .forEach(key => localEnv[key] = process.env[key]);
         this.logger.info('Current env', {env: localEnv});
     }

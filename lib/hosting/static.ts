@@ -11,7 +11,7 @@ export class StaticFiles extends BaseService {
     }
 
     private get applicationDirectory(): string {
-        return process.env['notes.application.directory'];
+        return process.env['notes_application_directory'];
     }
 
     private get indexFile(): string {
