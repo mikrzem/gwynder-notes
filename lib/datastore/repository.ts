@@ -42,9 +42,7 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
 
     public createContent(entity: SelectedEntity): SelectedData {
         const result: any = {id: entity.id};
-        for (const column of this.schema.columns) {
-            result[column.name] = entity[column.name];
-        }
+        this.parseContent(result, entity);
         return result;
     }
 
@@ -112,7 +110,7 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
             `UPDATE ${this.entityName} SET content = $1 WHERE id = $2 AND owner = $3 RETURNING id`,
             [content, id, owner]
         );
-        if (result.rowCount< 1) {
+        if (result.rowCount < 1) {
             throw new DataNotFound(this.entityName + ':' + id);
         }
     }
@@ -139,6 +137,9 @@ export abstract class EntityRepository<SelectedEntity extends Entity, SelectedDa
     private parseContent(target: any, source: any): any {
         for (const column of this.schema.columns) {
             target[column.name] = source[column.name];
+            if (!target[column.name] && column.config.default) {
+                target[column.name] = JSON.parse(JSON.stringify(column.config.default));
+            }
         }
         return target;
     }

@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import {Schema} from '../data';
-import {ColumnData} from './data';
+import {ColumnConfig, ColumnData} from './data';
 
 const SCHEMA_KEY = 'gwynder:schema';
 
@@ -15,8 +15,8 @@ class ColumnService {
         }
     }
 
-    public addColumn(target: any, property: string): ColumnData {
-        const columnData = new ColumnData(property);
+    public addColumn(target: any, property: string, config: ColumnConfig): ColumnData {
+        const columnData = new ColumnData(property, config);
         const schema = this.getSchema(target);
         schema.setColumn(property, columnData);
         return columnData;

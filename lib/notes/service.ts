@@ -4,12 +4,14 @@ import {PageRequest, PageResponse} from '../datastore/paging';
 import {PagingService} from '../utils/paging.service';
 import {NoteData} from './data';
 import {NoteRepository} from './repository';
+import {NoteSegmentService} from '../segments/service';
 
 export class NoteService extends BaseService {
 
     constructor(
         private readonly repository: NoteRepository,
-        private readonly paging: PagingService
+        private readonly paging: PagingService,
+        private readonly segments: NoteSegmentService
     ) {
         super();
     }
@@ -30,10 +32,12 @@ export class NoteService extends BaseService {
     }
 
     public async create(content: NoteData, owner: string): Promise<CreateResult> {
+        this.segments.validateNote(content);
         return await this.repository.create(content, owner);
     }
 
     public async update(content: NoteData, id: number, owner: string) {
+        this.segments.validateNote(content);
         await this.repository.update(content, id, owner);
     }
 
