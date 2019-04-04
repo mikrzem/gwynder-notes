@@ -19,7 +19,7 @@ export class RegistrationService extends BaseService {
             path: this.selfUrl + '/application/notes',
             displayName: 'Notes',
             startPath: 'page/'
-        }
+        };
     }
 
     private get apiConfiguration() {
@@ -32,10 +32,40 @@ export class RegistrationService extends BaseService {
     public async initialize() {
         if (this.shouldRegister()) {
             this.logger.info('ENABLED Registering service with central');
-            await this.registerApi();
-            await this.registerApplication();
+            await this.registerWithRetry();
         } else {
             this.logger.info('DISABLED Registering service with central');
+        }
+    }
+
+    private async registerWithRetry() {
+        let attemptsLeft = 10;
+        let success = await this.tryRegister();
+        while (!success && attemptsLeft) {
+            this.logger.info('Failed to register service. Attempts left: ' + attemptsLeft);
+            attemptsLeft--;
+            await this.sleep();
+            success = await this.tryRegister();
+        }
+        if (!success) {
+            throw new Error('Failed to register service');
+        }
+    }
+
+    private sleep(): Promise<any> {
+        return new Promise<any>((resolve => {
+            setTimeout(resolve, 1000 * 60);
+        }));
+    }
+
+    private async tryRegister(): Promise<boolean> {
+        try {
+            await this.registerApi();
+            await this.registerApplication();
+            return true;
+        } catch (e) {
+            console.error(e);
+            return false;
         }
     }
 
@@ -59,7 +89,7 @@ export class RegistrationService extends BaseService {
                 'InternalToken': await this.token(),
                 'Content-Type': 'application/json'
             }
-        }
+        };
     }
 
     private async registerApplication() {
@@ -67,7 +97,7 @@ export class RegistrationService extends BaseService {
         await fetch(
             this.registerUrl + '/proxy/application/notes',
             await this.fetchOptions(this.applicationConfiguration)
-        )
+        );
     }
 
     private async registerApi() {
@@ -75,7 +105,7 @@ export class RegistrationService extends BaseService {
         await fetch(
             this.registerUrl + '/proxy/api/notes',
             await this.fetchOptions(this.apiConfiguration)
-        )
+        );
     }
 
 }
