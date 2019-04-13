@@ -1,6 +1,6 @@
 {
   "name": "gwynder-notes",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Application for storing notes",
   "main": "./dist/server.js",
   "scripts": {
