@@ -9,7 +9,11 @@ export const loadOwner = (request: Request, response: Response, next: () => void
     if (!ownerHeader || ownerHeader.length < 1) {
         request[OWNER_FIELD] = 'default_owner';
     } else {
-        request[OWNER_FIELD] = ownerHeader[0];
+        if (Array.isArray(ownerHeader)) {
+            request[OWNER_FIELD] = ownerHeader[0];
+        } else {
+            request[OWNER_FIELD] = ownerHeader;
+        }
     }
     next();
 };

@@ -44,4 +44,8 @@ export class NoteService extends BaseService {
     public async delete(id: number, owner: string) {
         await this.repository.delete(id, owner);
     }
+
+    public async count(owner: string): Promise<number> {
+        return await this.repository.count(owner);
+    }
 }

@@ -13,19 +13,22 @@ export class RegistrationService extends BaseService {
         return process.env['notes_self_url'];
     }
 
-    private get applicationConfiguration() {
+    private get apiConfiguration(): ApiConfiguration {
         return {
             name: 'notes',
-            path: this.selfUrl + '/application/notes',
-            displayName: 'Notes',
-            startPath: 'page/'
-        };
-    }
-
-    private get apiConfiguration() {
-        return {
-            name: 'notes',
-            path: this.selfUrl + '/api/notes'
+            path: this.selfUrl + '/api/notes',
+            application: {
+                active: true,
+                path: this.selfUrl + '/application/notes',
+                displayName: 'Notes',
+                startPath: 'page/'
+            },
+            dashboard: {
+                active: true
+            },
+            health: {
+                active: true
+            }
         };
     }
 
@@ -61,7 +64,6 @@ export class RegistrationService extends BaseService {
     private async tryRegister(): Promise<boolean> {
         try {
             await this.registerApi();
-            await this.registerApplication();
             return true;
         } catch (e) {
             console.error(e);
@@ -92,14 +94,6 @@ export class RegistrationService extends BaseService {
         };
     }
 
-    private async registerApplication() {
-        this.logger.info('Registering application at central');
-        await fetch(
-            this.registerUrl + '/proxy/application/notes',
-            await this.fetchOptions(this.applicationConfiguration)
-        );
-    }
-
     private async registerApi() {
         this.logger.info('Registering API at central');
         await fetch(
@@ -108,4 +102,23 @@ export class RegistrationService extends BaseService {
         );
     }
 
+}
+
+interface ApiConfiguration {
+    name: string;
+    path: string;
+    application: {
+        active: boolean;
+        path: string;
+        displayName: string;
+        startPath: string;
+    },
+    dashboard: {
+        active: boolean;
+        path?: string;
+    },
+    health: {
+        active: boolean;
+        path?: string;
+    }
 }
